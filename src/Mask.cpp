@@ -1,4 +1,4 @@
-#include "MaskCreator.h"
+#include "Mask.h"
 
 //--------------------------------------------------------------
 void MaskCreator::setup(unsigned _maskVersion){

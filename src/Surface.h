@@ -3,13 +3,13 @@
 #include "ofMain.h"
 #include "ofxGLWarper.h"
 
-#include "MaskCreator.h"
+#include "Mask.h"
 
 
 class WarpedWindow : public ofBaseApp{
 	
 	public:
-		void setup(unsigned int windowVersion);
+		void setup(unsigned int surfaceNumber);
 		void draw();
 
 		void keyPressed(int key);
@@ -25,7 +25,7 @@ class WarpedWindow : public ofBaseApp{
 		void loadExternalMask(string maskPath);
 		void playVideo(bool palindrome = 0);
 
-		unsigned int windowVersion;
+		unsigned int _surfaceNumber;
 
 	private:
 		void drawWarperNumber();
@@ -46,8 +46,9 @@ class WarpedWindow : public ofBaseApp{
 		float playhead;
 		float valueEased;
 
-		string imgPath;
-		void setImgPath(string imgPath);
+		string _source;
+		void setSource(string source);
+		bool isSourceVideo;
 
 		unsigned int numberOfImages;
 		bool hasBeenZero;

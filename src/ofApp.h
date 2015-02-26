@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "WarpedWindow.h"
+#include "Surface.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -25,5 +25,4 @@ class ofApp : public ofBaseApp{
 
 		unsigned currentWindow;
 
-		ofFileDialogResult fileResult;
 };

@@ -45,9 +45,12 @@ void ofApp::keyPressed(int key){
 	}
 
 	if(key == 'o') {
+		ofFileDialogResult fileResult;
 		fileResult = ofSystemLoadDialog();
+
 		if(fileResult.bSuccess) {
 			cout << "Name = " << fileResult.getName() << endl;
+			
 		} else {
 			cout << "No file loaded" << endl;
 		}

@@ -1,30 +1,29 @@
-#include "WarpedWindow.h"
+#include "Surface.h"
 
 //--------------------------------------------------------------
-void WarpedWindow::setup(unsigned _windowVersion){	 
-	windowVersion = _windowVersion;
-	
+void WarpedWindow::setup(unsigned surfaceNumber){
+	_surfaceNumber= surfaceNumber;
+
 	// Setup video
 	playhead = 1;
 	vid.allocate(400, 200, OF_IMAGE_COLOR);
 
         // Set mode
         // 0: View mode (global)
-        // 1: Edit warper 
+        // 1: Edit warper
         // 2: Edit mask
         // 3: Create mask
-        mode = 0; 
+        mode = 0;
 	modeName = "no mode";
-        
+
 	hasBeenZero = false;
-        
-	warperConfig = "warperConfig" + ofToString(windowVersion) + ".xml";
+
+	warperConfig = "warperConfig" + ofToString(_surfaceNumber) + ".xml";
 	warper.setup(0, 0, vid.getWidth(), vid.getHeight());
 	warper.load(warperConfig);
 
-        mask.setup(windowVersion);
+        mask.setup(_surfaceNumber);
 	hasExternalMask = false;
-
 }
 
 //--------------------------------------------------------------
@@ -71,16 +70,16 @@ void WarpedWindow::draw() {
 void WarpedWindow::keyPressed(int key){
 
         switch (key) {
-		
+
 		// Change modes
 		case 'w':
 			mode = 1; // Go to warp edit mode
 		break;
 
 		case 'm':
-			if(mask.vertex.size() == 0 || mode == 2) 
+			if(mask.vertex.size() == 0 || mode == 2)
 				mode = 3; // Go to mask creation mode if no mask is present
-			else 
+			else
 				mode = 2; // else go to mask edit mode
 
 			if(mode == 3)
@@ -100,7 +99,7 @@ void WarpedWindow::keyPressed(int key){
 		case 's':
 			warper.save(warperConfig);
 			mask.saveShape();
-			
+
 			isFlash = true;
 			prevFrameNum = ofGetFrameNum();
 		break;
@@ -117,8 +116,8 @@ void WarpedWindow::keyPressed(int key){
 		break;
         }
 
-	cout << "Window " << windowVersion << " is now in " << modeName << endl;
-        
+	cout << "Window " << _surfaceNumber << " is now in " << modeName << endl;
+
         if(mode == 1) {
 		warper.deactivate();
 		warper.activate();
@@ -159,7 +158,7 @@ void WarpedWindow::mouseReleased(int x, int y, int button) {
 			}
 			else if (button == 2)
 				mask.popBackVertex();
-			if(isDoubleClick()) 
+			if(isDoubleClick())
 				mode = 2;
 		break;
 
@@ -169,29 +168,12 @@ void WarpedWindow::mouseReleased(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void WarpedWindow::setAnglePath(string anglePath) {
-	// Iterate through all folders, setting the imgPath
-	// in relation to windowVersion
+void WarpedWindow::setSource(string source) {
+	_source = source;
 
-	ofDirectory angleDir(anglePath);
-	angleDir.listDir();
-
-	string newImgPath = angleDir.getPath(windowVersion) + "/";
-	setImgPath(newImgPath);
-
-	cout << "Setting angle path in window version " << windowVersion << " to " << angleDir.getPath(windowVersion) << endl;
-}
-//--------------------------------------------------------------
-void WarpedWindow::setImgPath(string _imgPath) {
-	imgPath = _imgPath;
-
-	ofDirectory imgDir(imgPath);
-	imgDir.listDir();
-	
 	numberOfImages = imgDir.size();
-
-	cout << "Number of images in " << imgPath << " is " << numberOfImages << endl;
 }
+
 //--------------------------------------------------------------
 unsigned int WarpedWindow::backgroundSet() {
         // Small function to be able to flash the screen when
@@ -200,7 +182,7 @@ unsigned int WarpedWindow::backgroundSet() {
         if(isFlash){
 		if(ofGetFrameNum() > prevFrameNum + 10)
 			isFlash = false;
-	
+
 		return 255;
         } else {
 		return 0;
@@ -213,9 +195,9 @@ void WarpedWindow::setViewMode() {
 }
 //--------------------------------------------------------------
 void WarpedWindow::drawWarperNumber() {
-        // Draw window number of current warper top left of warper        
+        // Draw window number of current warper top left of warper
 	if(warper.isActive())
-		ofDrawBitmapString(ofToString(windowVersion), 0, 0);
+		ofDrawBitmapString(ofToString(_surfaceNumber), 0, 0);
 }
 //--------------------------------------------------------------
 void WarpedWindow::drawFinalView() {
@@ -226,7 +208,7 @@ void WarpedWindow::drawFinalView() {
 			glColorMask(0, 0, 0, 1);
 			glBlendFunc(GL_SRC_ALPHA, GL_ZERO);
 			externalMask.draw(0,0);
-			
+
 			glColorMask(1, 1, 1, 1);
 			glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
 		}
@@ -238,7 +220,7 @@ void WarpedWindow::drawFinalView() {
 			glColorMask(0, 0, 0, 1);
 			glBlendFunc(GL_SRC_ALPHA, GL_ZERO);
 			mask.drawShape(vidAlpha);
-			
+
 			// Draw the video into the buffer, masked by the current alpha
 			glColorMask(1, 1, 1, 1);
 			glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
@@ -249,6 +231,7 @@ void WarpedWindow::drawFinalView() {
 		glDisable(GL_BLEND);
 	ofPopStyle();
 }
+
 //--------------------------------------------------------------
 void WarpedWindow::drawVideo() {
 	unsigned intPlayhead = ceil(playhead);
@@ -257,6 +240,7 @@ void WarpedWindow::drawVideo() {
 	vid.loadImage(imgName);
 	vid.draw(0, 0, vid.getWidth(), vid.getHeight());
 }
+
 //--------------------------------------------------------------
 void WarpedWindow::loadExternalMask(string maskPath) {
 	externalMask.loadImage(maskPath);
