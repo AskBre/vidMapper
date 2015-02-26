@@ -23,7 +23,7 @@ class WarpedWindow : public ofBaseApp{
 		unsigned int backgroundSet();
 		void setViewMode();
 		void loadExternalMask(string maskPath);
-		void playVideo(string playType, float value);
+		void playVideo(bool palindrome = 0);
 
 		unsigned int windowVersion;
 

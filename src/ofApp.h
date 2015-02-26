@@ -2,7 +2,6 @@
 
 #include "ofMain.h"
 #include "WarpedWindow.h"
-#include "SoundAnalyser.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -18,18 +17,13 @@ class ofApp : public ofBaseApp{
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 
-		void getSceneNames();
-		void setCurrentScene(unsigned sceneNum);
 		void playVideo(int windowVersion, string playType, int channel);
 
 		void showFramerate();
 
 		vector<WarpedWindow> window;
-		SoundAnalyser sound;
 
 		unsigned currentWindow;
-		unsigned scene;
-		unsigned prevScene;
 
-		vector<string> sceneName;
+		ofFileDialogResult fileResult;
 };

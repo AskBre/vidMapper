@@ -84,7 +84,7 @@ void WarpedWindow::keyPressed(int key){
 				mode = 2; // else go to mask edit mode
 
 			if(mode == 3)
-				mode == 2; // Swap the modes
+				mode = 2; // Swap the modes
 		break;
 
 		case 'v':
@@ -265,80 +265,12 @@ void WarpedWindow::loadExternalMask(string maskPath) {
 }
 
 //--------------------------------------------------------------
-void WarpedWindow::playVideo(string playType, float value) {
-
-	if (!playType.compare("volToSpeed") || !playType.compare("volToSpeedHip") || !playType.compare("volToSpeedLop") ){
-		// Volume to speed //
-		float playSpeed = ofClamp(value - 0.7, 0, 3) * 20;
-		valueEased = ofLerp(valueEased, playSpeed, 0.05);
-
-		cout << windowVersion << " Value: " <<  value << endl;
-		cout << "playSpeed " << playSpeed << endl;
-		if (playSpeed > 0)
-			playhead += playSpeed;
-
-		if (playhead < 1) {
-			playhead = numberOfImages;
-		} else if (playhead > numberOfImages) {
-			playhead = 1;
-		}
-
-		if (valueEased < 0.1) {
-			fadeOut();
-		} else {
-			fadeIn();
-		}
-	} else if (!playType.compare("kickToBoost")) {
-		// Kick to boost //
-		
-		playhead = ofLerp(playhead, value/2 * numberOfImages, 0.05);
-		valueEased = ofLerp(valueEased, value, 0.05);
-
-		if (playhead < 1) {
-			playhead = 1;
-		} else if (playhead > numberOfImages) {
-			playhead = numberOfImages;
-		}
-		if(valueEased < 0.3) {
-			fadeOut();
-		} else { 
-			fadeIn();
-		}
-	} else if (!playType.compare("impulsToRandom")) {
-		// Kick to random pos //
-		
-		if(value == 0) {
-			hasBeenZero = true;
-		}
-
-		if(value == 1 && hasBeenZero) {
-			playhead = ofRandom(1, numberOfImages);
-			hasBeenZero = false;
-		}
-
-		valueEased = ofLerp(valueEased, value, 0.05);
-
-		if (playhead < numberOfImages) {
-			playhead += .5;
-		} else { 
-			playhead = 1;
-		}
-
-		if(valueEased < 0.05) {
-			fadeOut();
-		} else { 
-			fadeIn();
-		}
+void WarpedWindow::playVideo(bool palindrome) {
+	if(playhead < numberOfImages) {
+		playhead++;
 	} else {
-		fadeIn();
-		cout << "No playType by the name " << playType << " is known, playing normally" << endl;
-		if(playhead < numberOfImages) {
-			playhead++;
-		} else {
-			playhead = 0;
-		}
+		playhead = 0;
 	}
-	
 }
 
 //--------------------------------------------------------------

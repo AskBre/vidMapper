@@ -8,16 +8,17 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +0 src/ofApp.h
-badd +0 src/ofApp.cpp
-badd +0 src/WarpedWindow.h
-badd +0 src/WarpedWindow.cpp
-badd +0 src/MaskCreator.h
-badd +0 src/MaskCreator.cpp
-badd +0 src/SoundAnalyser.h
-badd +0 src/SoundAnalyser.cpp
-badd +0 TODO.md
-badd +0 README.md
+badd +1 src/ofApp.h
+badd +47 src/ofApp.cpp
+badd +1 src/WarpedWindow.h
+badd +273 src/WarpedWindow.cpp
+badd +1 src/MaskCreator.h
+badd +1 src/MaskCreator.cpp
+badd +1 src/SoundAnalyser.h
+badd +1 src/SoundAnalyser.cpp
+badd +1 TODO.md
+badd +1 README.md
+badd +168 ../../../libs/openFrameworksCompiled/project/makefileCommon/compile.project.mk
 argglobal
 silent! argdel *
 argadd src/ofApp.h
@@ -44,11 +45,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
+let s:l = 46 - ((45 * winheight(0) + 42) / 84)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+46
 normal! 0
 wincmd w
 argglobal
@@ -62,12 +63,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
+let s:l = 28 - ((27 * winheight(0) + 42) / 84)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+28
+normal! 046|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 139 + 139) / 279)
 exe 'vert 2resize ' . ((&columns * 139 + 139) / 279)
@@ -93,11 +94,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
+let s:l = 129 - ((79 * winheight(0) + 42) / 84)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+129
 normal! 0
 wincmd w
 argglobal
@@ -111,12 +112,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
+let s:l = 38 - ((37 * winheight(0) + 42) / 84)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+38
+normal! 021|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 139 + 139) / 279)
 exe 'vert 2resize ' . ((&columns * 139 + 139) / 279)
@@ -142,64 +143,15 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
+let s:l = 16 - ((15 * winheight(0) + 42) / 84)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+16
 normal! 0
 wincmd w
 argglobal
 edit src/MaskCreator.h
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
-normal! 0
-wincmd w
-exe 'vert 1resize ' . ((&columns * 139 + 139) / 279)
-exe 'vert 2resize ' . ((&columns * 139 + 139) / 279)
-tabedit src/SoundAnalyser.cpp
-set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 139 + 139) / 279)
-exe 'vert 2resize ' . ((&columns * 139 + 139) / 279)
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 42) / 84)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
-normal! 0
-wincmd w
-argglobal
-edit src/SoundAnalyser.h
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -265,10 +217,9 @@ normal! zt
 7
 normal! 090|
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 139 + 139) / 279)
 exe 'vert 2resize ' . ((&columns * 139 + 139) / 279)
-tabnext 5
+tabnext 1
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
