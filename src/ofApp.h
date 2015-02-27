@@ -17,12 +17,11 @@ class ofApp : public ofBaseApp{
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 
-		void playVideo(int windowVersion, string playType, int channel);
-
 		void showFramerate();
 
-		vector<WarpedWindow> window;
+		void newSurface();
 
-		unsigned currentWindow;
+		vector<Surface> surface;
 
+		int currentSurface;
 };

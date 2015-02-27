@@ -6,11 +6,12 @@
 #include "Mask.h"
 
 
-class WarpedWindow : public ofBaseApp{
-	
+class Surface : public ofBaseApp{
+
 	public:
 		void setup(unsigned int surfaceNumber);
 		void draw();
+		void update();
 
 		void keyPressed(int key);
 		void mouseMoved(int x, int y);
@@ -18,19 +19,19 @@ class WarpedWindow : public ofBaseApp{
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 
-		void setAnglePath(string imgPath);
-		void addImg(string imgName);
 		unsigned int backgroundSet();
 		void setViewMode();
 		void loadExternalMask(string maskPath);
-		void playVideo(bool palindrome = 0);
+
+		void setSource(ofFileDialogResult file);
 
 		unsigned int _surfaceNumber;
 
 	private:
-		void drawWarperNumber();
+		void drawSurfaceNumber();
 		void drawFinalView();
 		void drawVideo();
+
 		void fadeOut();
 		void fadeIn();
 		bool isDoubleClick();
@@ -43,11 +44,8 @@ class WarpedWindow : public ofBaseApp{
 		unsigned int backgroundColor;
 		int lastTime;
 
-		float playhead;
 		float valueEased;
 
-		string _source;
-		void setSource(string source);
 		bool isSourceVideo;
 
 		unsigned int numberOfImages;
@@ -56,7 +54,7 @@ class WarpedWindow : public ofBaseApp{
 		ofxGLWarper warper;
 		string warperConfig;
 
-		ofImage vid;
+		ofVideoPlayer vid;
 		ofPoint vidSize;
 		float vidAlpha;
 

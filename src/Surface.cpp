@@ -1,16 +1,12 @@
 #include "Surface.h"
 
 //--------------------------------------------------------------
-void WarpedWindow::setup(unsigned surfaceNumber){
+void Surface::setup(unsigned surfaceNumber){
 	_surfaceNumber= surfaceNumber;
-
-	// Setup video
-	playhead = 1;
-	vid.allocate(400, 200, OF_IMAGE_COLOR);
 
         // Set mode
         // 0: View mode (global)
-        // 1: Edit warper
+        // 1: Edit surface
         // 2: Edit mask
         // 3: Create mask
         mode = 0;
@@ -24,10 +20,11 @@ void WarpedWindow::setup(unsigned surfaceNumber){
 
         mask.setup(_surfaceNumber);
 	hasExternalMask = false;
+
+	vidAlpha = 1;
 }
 
-//--------------------------------------------------------------
-void WarpedWindow::draw() {
+void Surface::draw() {
 	warper.begin();
 
 		switch (mode) {
@@ -40,7 +37,7 @@ void WarpedWindow::draw() {
 				modeName = "edit warper mode";
 				drawFinalView();
 				warper.draw();
-				drawWarperNumber();
+				drawSurfaceNumber();
 			break;
 
 			case 2: // Edit mask
@@ -66,8 +63,19 @@ void WarpedWindow::draw() {
 	warper.end();
 }
 
+void Surface::update() {
+	vid.update();
+	/*
+	if(playhead < numberOfImages) {
+		playhead++;
+	} else {
+		playhead = 0;
+	}
+	*/
+}
+
 //--------------------------------------------------------------
-void WarpedWindow::keyPressed(int key){
+void Surface::keyPressed(int key){
 
         switch (key) {
 
@@ -116,7 +124,7 @@ void WarpedWindow::keyPressed(int key){
 		break;
         }
 
-	cout << "Window " << _surfaceNumber << " is now in " << modeName << endl;
+	cout << "Surface " << _surfaceNumber << " is now in " << modeName << endl;
 
         if(mode == 1) {
 		warper.deactivate();
@@ -127,21 +135,20 @@ void WarpedWindow::keyPressed(int key){
 
 }
 
-//--------------------------------------------------------------
-void WarpedWindow::mouseMoved(int x, int y) {
+void Surface::mouseMoved(int x, int y) {
         mask.updateCursor(x, y);
 }
-//--------------------------------------------------------------
-void WarpedWindow::mouseDragged(int x, int y, int button) {
+
+void Surface::mouseDragged(int x, int y, int button) {
 	mask.mouseDragged(x, y, button);
         mask.updateCursor(x, y);
 }
-//--------------------------------------------------------------
-void WarpedWindow::mousePressed(int x, int y, int button) {
+
+void Surface::mousePressed(int x, int y, int button) {
         mask.mousePressed(x, y, button);
 }
-//--------------------------------------------------------------
-void WarpedWindow::mouseReleased(int x, int y, int button) {
+
+void Surface::mouseReleased(int x, int y, int button) {
         switch (mode) {
 		case 0: // View mode
 		break;
@@ -168,14 +175,15 @@ void WarpedWindow::mouseReleased(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void WarpedWindow::setSource(string source) {
-	_source = source;
+void Surface::setSource(ofFileDialogResult file) {
+	cout << "Opening the file " << file.getPath() << endl;
 
-	numberOfImages = imgDir.size();
+	vid.loadMovie(file.getPath());
+	vid.setLoopState(OF_LOOP_NORMAL);
+	vid.play();
 }
 
-//--------------------------------------------------------------
-unsigned int WarpedWindow::backgroundSet() {
+unsigned int Surface::backgroundSet() {
         // Small function to be able to flash the screen when
         // performing certain stuff
 
@@ -188,19 +196,19 @@ unsigned int WarpedWindow::backgroundSet() {
 		return 0;
         }
 }
-//--------------------------------------------------------------
-void WarpedWindow::setViewMode() {
+
+void Surface::setViewMode() {
 	mode = 0;
 	warper.deactivate();
 }
-//--------------------------------------------------------------
-void WarpedWindow::drawWarperNumber() {
-        // Draw window number of current warper top left of warper
+
+void Surface::drawSurfaceNumber() {
+        // Draw surfaec number of current surface top left of surface
 	if(warper.isActive())
 		ofDrawBitmapString(ofToString(_surfaceNumber), 0, 0);
 }
-//--------------------------------------------------------------
-void WarpedWindow::drawFinalView() {
+
+void Surface::drawFinalView() {
 
 	ofPushStyle();
 		if(hasExternalMask) {
@@ -232,45 +240,29 @@ void WarpedWindow::drawFinalView() {
 	ofPopStyle();
 }
 
-//--------------------------------------------------------------
-void WarpedWindow::drawVideo() {
-	unsigned intPlayhead = ceil(playhead);
-	string imgName = imgPath + ofToString(intPlayhead) + ".png";
-
-	vid.loadImage(imgName);
+void Surface::drawVideo() {
 	vid.draw(0, 0, vid.getWidth(), vid.getHeight());
 }
 
 //--------------------------------------------------------------
-void WarpedWindow::loadExternalMask(string maskPath) {
+void Surface::loadExternalMask(string maskPath) {
 	externalMask.loadImage(maskPath);
 	externalMask.resize(vid.getWidth(), vid.getHeight());
 	hasExternalMask = true;
 }
 
-//--------------------------------------------------------------
-void WarpedWindow::playVideo(bool palindrome) {
-	if(playhead < numberOfImages) {
-		playhead++;
-	} else {
-		playhead = 0;
-	}
-}
 
-//--------------------------------------------------------------
-void WarpedWindow::fadeOut() {
+void Surface::fadeOut() {
 	if(vidAlpha > 0) {
 		vidAlpha -= .05;
 	}
 }
-//--------------------------------------------------------------
-void WarpedWindow::fadeIn() {
+void Surface::fadeIn() {
 	if(vidAlpha < 1) {
 		vidAlpha += .05;
 	}
 }
-//--------------------------------------------------------------
-bool WarpedWindow::isDoubleClick() {
+bool Surface::isDoubleClick() {
         unsigned int timer = 250;
 
         if(ofGetElapsedTimeMillis() - lastTime < timer) {

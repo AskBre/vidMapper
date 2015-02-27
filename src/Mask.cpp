@@ -187,7 +187,7 @@ void MaskCreator::saveShape() {
 	positions.pushTag("positions");
 	//points is a vector<ofPoint> that we want to save to a file
 	for(int i = 0; i < vertex.size(); i++){
-	    //each position tag represents one point
+//each position tag represents one point
 		positions.addTag("position");
 		positions.pushTag("position",i);
 		//so set the three values in the file

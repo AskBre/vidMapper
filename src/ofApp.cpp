@@ -6,84 +6,84 @@ void ofApp::setup(){
         ofSetFrameRate(24);
         ofSetVerticalSync(true);
 
-	// Amount of videos
-	window.resize(1);
-
-	// Setup each window
-	for(unsigned int i = 0; i < window.size(); i++) {
-		window[i].setup(i);
-	}
-	
-//	window[2].loadExternalMask("masks/TheTreeHD.png");
+	currentSurface = -1;
 }
 
-//--------------------------------------------------------------
 void ofApp::update(){	
-	// Open a new window for each window
+	// Open a new surface for each window
 	// This is where the playing and rendering is taking place
-	for(int i = 0; i < window.size(); i++) {
-		window[0].playVideo();
+	for(int i = 0; i < surface.size(); i++) {
+		surface[i].update();
 	}
 }
-//--------------------------------------------------------------
+
 void ofApp::draw(){
-        for(unsigned int i = 0; i < window.size(); i++) {
-//		window[i].draw();
+        for(unsigned i = 0; i < surface.size(); i++) {
+		surface[i].draw();
 	}
 
 #ifdef DEBUG
 	showFramerate();
 #endif
 }
+
+//--------------------------------------------------------------
+void ofApp::newSurface() {
+	Surface tmpSurface;
+
+	ofFileDialogResult file = ofSystemLoadDialog();
+
+	if(file.bSuccess) {
+		cout << "Name = " << file.getName() << endl;
+		tmpSurface.setSource(file);
+	} else {
+		cout << "No file loaded" << endl;
+	}
+
+	tmpSurface.setup(surface.size());
+	surface.push_back(tmpSurface);
+}
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
         int keyNum = key-48; // "Converting" from keycode to number key
 
-	if(keyNum >= 0 && keyNum < window.size()) {
-		currentWindow = keyNum;
+	if(keyNum >= 0 && keyNum < surface.size()) {
+		currentSurface = keyNum;
 	}
 
 	if(key == 'o') {
-		ofFileDialogResult fileResult;
-		fileResult = ofSystemLoadDialog();
+		newSurface();
+			}
 
-		if(fileResult.bSuccess) {
-			cout << "Name = " << fileResult.getName() << endl;
+        for(unsigned int i = 0; i < surface.size(); i++) 
+		surface[i].setViewMode();
 			
-		} else {
-			cout << "No file loaded" << endl;
-		}
-	}
-
-        for(unsigned int i = 0; i < window.size(); i++) 
-		window[i].setViewMode();
-			
-	if(currentWindow >= 0)
-		 window[currentWindow].keyPressed(key);
+	if(currentSurface >= 0)
+		 surface[currentSurface].keyPressed(key);
 }
-//--------------------------------------------------------------
+
 void ofApp::mouseMoved(int x, int y){
-	if(currentWindow >= 0)
-		 window[currentWindow].mouseMoved(x, y);
-}
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-	if(currentWindow >= 0)
-		 window[currentWindow].mouseDragged(x, y, button);
-}
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-	if(currentWindow >= 0)
-		 window[currentWindow].mousePressed(x, y, button);
-}
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-	if(currentWindow >= 0)
-		 window[currentWindow].mouseReleased(x, y, button);
+	if(currentSurface >= 0)
+		surface[currentSurface].mouseMoved(x, y);
 }
 
-//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button){
+	if(currentSurface >= 0)
+		 surface[currentSurface].mouseDragged(x, y, button);
+}
+
+void ofApp::mousePressed(int x, int y, int button){
+	if(currentSurface >= 0)
+		 surface[currentSurface].mousePressed(x, y, button);
+}
+
+void ofApp::mouseReleased(int x, int y, int button){
+	if(currentSurface >= 0)
+		 surface[currentSurface].mouseReleased(x, y, button);
+}
+
 void ofApp::showFramerate() {
         ofDrawBitmapString("Framerate: " + ofToString(ofGetFrameRate()), 1, 10);
 }
