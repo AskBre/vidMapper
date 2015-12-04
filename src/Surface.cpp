@@ -5,11 +5,7 @@ void Surface::setup(unsigned surfaceNumber){
 	_surfaceNumber= surfaceNumber;
 
         // Set mode
-        // 0: View mode (global)
-        // 1: Edit surface
-        // 2: Edit mask
-        // 3: Create mask
-        mode = 0;
+        mode = VIEW_MODE;
 	modeName = "no mode";
 
 	hasBeenZero = false;
@@ -28,26 +24,26 @@ void Surface::draw() {
 	warper.begin();
 
 		switch (mode) {
-			case 0: // View mode
+			case VIEW_MODE:
 				modeName = "view mode";
 				drawFinalView();
 			break;
 
-			case 1: // Edit warper
+			case WARP_EDIT:
 				modeName = "edit warper mode";
 				drawFinalView();
 				warper.draw();
 				drawSurfaceNumber();
 			break;
 
-			case 2: // Edit mask
+			case MASK_EDIT:
 				modeName = "edit mask mode";
 				drawFinalView();
 				mask.drawCircles();
 				mask.drawCursor();
 			break;
 
-			case 3: // Create mask
+			case MASK_CREATE:
 				modeName = "create mask mode";
 				drawVideo();
 				mask.drawLines();
@@ -81,21 +77,19 @@ void Surface::keyPressed(int key){
 
 		// Change modes
 		case 'w':
-			mode = 1; // Go to warp edit mode
+			mode = WARP_EDIT;
 		break;
 
 		case 'm':
-			if(mask.vertex.size() == 0 || mode == 2)
-				mode = 3; // Go to mask creation mode if no mask is present
-			else
-				mode = 2; // else go to mask edit mode
+			// Go to mask creation mode if no mask is present
+			if(mask.vertex.size() == 0 || mode == MASK_EDIT) mode = MASK_CREATE;
+			else mode = MASK_EDIT;
 
-			if(mode == 3)
-				mode = 2; // Swap the modes
+//			if(mode == MASK_CREATE) mode = MASK_EDIT;
 		break;
 
 		case 'v':
-			mode = 0; // Go to view mode
+			mode = VIEW_MODE; // Go to view mode
 		break;
 
 		case 'r':
@@ -126,7 +120,7 @@ void Surface::keyPressed(int key){
 
 	cout << "Surface " << _surfaceNumber << " is now in " << modeName << endl;
 
-        if(mode == 1) {
+        if(mode == WARP_EDIT) {
 		warper.deactivate();
 		warper.activate();
         } else {
@@ -150,23 +144,20 @@ void Surface::mousePressed(int x, int y, int button) {
 
 void Surface::mouseReleased(int x, int y, int button) {
         switch (mode) {
-		case 0: // View mode
+		case VIEW_MODE:
 		break;
 
-		case 1: // Edit warper
+		case WARP_EDIT:
 		break;
 
-		case 2: // Edit mask
+		case MASK_EDIT:
 		break;
 
-		case 3: // Create mask
-			if(button == 0) {
-				mask.newVertex(x, y);
-			}
-			else if (button == 2)
-				mask.popBackVertex();
-			if(isDoubleClick())
-				mode = 2;
+		case MASK_CREATE:
+			if(button == 0) mask.newVertex(x, y);
+			else if (button == 2) mask.popBackVertex();
+
+			if(isDoubleClick()) mode = MASK_EDIT;
 		break;
 
 		default:
@@ -188,8 +179,7 @@ unsigned int Surface::backgroundSet() {
         // performing certain stuff
 
         if(isFlash){
-		if(ofGetFrameNum() > prevFrameNum + 10)
-			isFlash = false;
+		if(ofGetFrameNum() > prevFrameNum + 10) isFlash = false;
 
 		return 255;
         } else {
@@ -198,14 +188,13 @@ unsigned int Surface::backgroundSet() {
 }
 
 void Surface::setViewMode() {
-	mode = 0;
+	mode = VIEW_MODE;
 	warper.deactivate();
 }
 
 void Surface::drawSurfaceNumber() {
         // Draw surfaec number of current surface top left of surface
-	if(warper.isActive())
-		ofDrawBitmapString(ofToString(_surfaceNumber), 0, 0);
+	if(warper.isActive()) ofDrawBitmapString(ofToString(_surfaceNumber), 0, 0);
 }
 
 void Surface::drawFinalView() {
@@ -253,14 +242,10 @@ void Surface::loadExternalMask(string maskPath) {
 
 
 void Surface::fadeOut() {
-	if(vidAlpha > 0) {
-		vidAlpha -= .05;
-	}
+	if(vidAlpha > 0) vidAlpha -= .05;
 }
 void Surface::fadeIn() {
-	if(vidAlpha < 1) {
-		vidAlpha += .05;
-	}
+	if(vidAlpha < 1) vidAlpha += .05;
 }
 bool Surface::isDoubleClick() {
         unsigned int timer = 250;

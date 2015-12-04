@@ -28,6 +28,13 @@ class Surface : public ofBaseApp{
 		unsigned int _surfaceNumber;
 
 	private:
+		enum modes_t{
+			VIEW_MODE,
+			WARP_EDIT,
+			MASK_EDIT,
+			MASK_CREATE
+		};
+
 		void drawSurfaceNumber();
 		void drawFinalView();
 		void drawVideo();
