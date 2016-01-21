@@ -22,7 +22,7 @@ void MaskCreator::setup(unsigned _maskVersion){
         float blurDownsample = 0.5;
         isBlur = false;
         blur.setup(ofGetWidth(), ofGetHeight(), blurRadius, blurShape, blurPasses, blurDownsample);
-//        blur.setBrightness(.5);
+        blur.setBrightness(.5);
 
 	loadShape();
 }
@@ -49,10 +49,10 @@ void MaskCreator::drawLines(){
 	ofPushStyle();
 		ofSetHexColor(0xffffff);
 		for(unsigned int i = 1; i < vertex.size(); i++) {
-			ofLine(vertex[i].x, vertex[i].y, vertex[i-1].x, vertex[i-1].y);
+			ofDrawLine(vertex[i].x, vertex[i].y, vertex[i-1].x, vertex[i-1].y);
 		}
 
-		if(vertex.size() == 1) ofCircle(vertex[0].x, vertex[0].y, 1);
+		if(vertex.size() == 1) ofDrawCircle(vertex[0].x, vertex[0].y, 1);
 	ofPopStyle();
 }
 
@@ -78,7 +78,7 @@ void MaskCreator::drawCircles(){
 		ofSetHexColor(circleColor);
 		ofNoFill();
 		for(unsigned int i = 0; i < vertex.size(); i++) {
-			ofCircle(vertex[i].x, vertex[i].y, vertex[i].radius);
+			ofDrawCircle(vertex[i].x, vertex[i].y, vertex[i].radius);
 		}
 	ofPopStyle();
 }
@@ -87,10 +87,10 @@ void MaskCreator::drawCursor(){
 	ofPushStyle();
 		ofNoFill();
 		ofSetHexColor(cursor.borderColor);
-		ofCircle(cursor.x, cursor.y, cursor.radius);
+		ofDrawCircle(cursor.x, cursor.y, cursor.radius);
 		ofFill();
 		ofSetHexColor(cursor.fillColor);
-		ofCircle(cursor.x, cursor.y, cursor.radius/4);
+		ofDrawCircle(cursor.x, cursor.y, cursor.radius/4);
 	ofPopStyle();
 }
 //--------------------------------------------------------------
@@ -184,7 +184,7 @@ void MaskCreator::saveShape() {
 	positions.addTag("positions");
 	positions.pushTag("positions");
 	//points is a vector<ofPoint> that we want to save to a file
-	for(int i = 0; i < vertex.size(); i++){
+	for(unsigned i = 0; i < vertex.size(); i++){
 //each position tag represents one point
 		positions.addTag("position");
 		positions.pushTag("position",i);

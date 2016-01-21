@@ -12,7 +12,7 @@ void ofApp::setup(){
 void ofApp::update(){
 	// Open a new surface for each window
 	// This is where the playing and rendering is taking place
-	for(int i = 0; i < surface.size(); i++) {
+	for(unsigned i = 0; i < surface.size(); i++) {
 		surface[i].update();
 	}
 }
@@ -47,7 +47,7 @@ void ofApp::newSurface() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
-        int keyNum = key-48; // "Converting" from keycode to number key
+        unsigned keyNum = key-48; // "Converting" from keycode to number key
 
 	if(keyNum >= 0 && keyNum < surface.size()) {
 		currentSurface = keyNum;

@@ -169,7 +169,7 @@ void Surface::mouseReleased(int x, int y, int button) {
 void Surface::setSource(ofFileDialogResult file) {
 	cout << "Opening the file " << file.getPath() << endl;
 
-	vid.loadMovie(file.getPath());
+	vid.load(file.getPath());
 	vid.setLoopState(OF_LOOP_NORMAL);
 	vid.play();
 }
@@ -235,7 +235,7 @@ void Surface::drawVideo() {
 
 //--------------------------------------------------------------
 void Surface::loadExternalMask(string maskPath) {
-	externalMask.loadImage(maskPath);
+	externalMask.load(maskPath);
 	externalMask.resize(vid.getWidth(), vid.getHeight());
 	hasExternalMask = true;
 }
