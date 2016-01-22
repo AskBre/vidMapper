@@ -5,7 +5,7 @@ void MaskCreator::setup(unsigned _maskVersion){
 	maskVersion = _maskVersion;
 
         vertexBigRadius = 8;
-        
+
         circleColor = 0xff0000;
 
         ofSetPolyMode(OF_POLY_WINDING_ODD);
@@ -22,7 +22,7 @@ void MaskCreator::setup(unsigned _maskVersion){
         float blurDownsample = 0.5;
         isBlur = false;
         blur.setup(ofGetWidth(), ofGetHeight(), blurRadius, blurShape, blurPasses, blurDownsample);
-//        blur.setBrightness(.5);
+        blur.setBrightness(.5);
 
 	loadShape();
 }
@@ -38,10 +38,8 @@ void MaskCreator::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void MaskCreator::mousePressed(int x, int y, int button){
         for(unsigned int i = 0; i < vertex.size(); i++) {
-		if(isMouseTouchingVertex(i, x, y)) 
-			vertex[i].bBeingDragged = true;
-		else 
-			vertex[i].bBeingDragged = false;
+		if(isMouseTouchingVertex(i, x, y)) vertex[i].bBeingDragged = true;
+		else vertex[i].bBeingDragged = false;
 	}
 }
 
@@ -51,10 +49,10 @@ void MaskCreator::drawLines(){
 	ofPushStyle();
 		ofSetHexColor(0xffffff);
 		for(unsigned int i = 1; i < vertex.size(); i++) {
-			ofLine(vertex[i].x, vertex[i].y, vertex[i-1].x, vertex[i-1].y);
+			ofDrawLine(vertex[i].x, vertex[i].y, vertex[i-1].x, vertex[i-1].y);
 		}
 
-		if(vertex.size() == 1) ofCircle(vertex[0].x, vertex[0].y, 1);
+		if(vertex.size() == 1) ofDrawCircle(vertex[0].x, vertex[0].y, 1);
 	ofPopStyle();
 }
 
@@ -80,7 +78,7 @@ void MaskCreator::drawCircles(){
 		ofSetHexColor(circleColor);
 		ofNoFill();
 		for(unsigned int i = 0; i < vertex.size(); i++) {
-			ofCircle(vertex[i].x, vertex[i].y, vertex[i].radius);
+			ofDrawCircle(vertex[i].x, vertex[i].y, vertex[i].radius);
 		}
 	ofPopStyle();
 }
@@ -89,10 +87,10 @@ void MaskCreator::drawCursor(){
 	ofPushStyle();
 		ofNoFill();
 		ofSetHexColor(cursor.borderColor);
-		ofCircle(cursor.x, cursor.y, cursor.radius);  
+		ofDrawCircle(cursor.x, cursor.y, cursor.radius);
 		ofFill();
 		ofSetHexColor(cursor.fillColor);
-		ofCircle(cursor.x, cursor.y, cursor.radius/4);  
+		ofDrawCircle(cursor.x, cursor.y, cursor.radius/4);
 	ofPopStyle();
 }
 //--------------------------------------------------------------
@@ -108,7 +106,7 @@ void MaskCreator::updateCursor(int x, int y){
 			vertex[i].bOver = false;
 			vertex[i].radius = 0;
 		}
-        } 
+        }
 }
 
 //--------------------------------------------------------------
@@ -186,7 +184,7 @@ void MaskCreator::saveShape() {
 	positions.addTag("positions");
 	positions.pushTag("positions");
 	//points is a vector<ofPoint> that we want to save to a file
-	for(int i = 0; i < vertex.size(); i++){
+	for(unsigned i = 0; i < vertex.size(); i++){
 //each position tag represents one point
 		positions.addTag("position");
 		positions.pushTag("position",i);
@@ -207,10 +205,8 @@ bool MaskCreator::isMouseTouchingVertex(unsigned int i, int x, int y) {
 	float diffY = y - vertex[i].y;
 	float dist = sqrt(diffX*diffX + diffY*diffY);
 
-	if (dist < vertexBigRadius/4) 
-		return true;
-	else 
-		return false;
+	if (dist < vertexBigRadius/4) return true;
+	else return false;
 }
 
 //--------------------------------------------------------------
@@ -218,7 +214,7 @@ bool MaskCreator::isMouseTouchingVertex(unsigned int i, int x, int y) {
 void MaskCreator::addVertex(int x, int y){
         // First return the closest two vertexes that are connected
         // Then add a new vertex between these
-           
+
         vector<<vector <float> > distances;
 
         // Get a vector of all the distances

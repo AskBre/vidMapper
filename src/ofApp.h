@@ -3,10 +3,12 @@
 #include "ofMain.h"
 #include "Surface.h"
 
+//#define DEBUG
+
 class ofApp : public ofBaseApp{
-	
+
 	public:
-		
+
 		void setup();
 		void update();
 		void draw();
