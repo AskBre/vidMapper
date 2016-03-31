@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "Surface.h"
 
-//#define DEBUG
+#define DEBUG
 
 class ofApp : public ofBaseApp{
 
@@ -21,7 +21,7 @@ class ofApp : public ofBaseApp{
 
 		void showFramerate();
 
-		void newSurface();
+		void loadVideos();
 
 		vector<Surface> surface;
 

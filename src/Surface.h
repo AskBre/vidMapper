@@ -23,7 +23,7 @@ class Surface : public ofBaseApp{
 		void setViewMode();
 		void loadExternalMask(string maskPath);
 
-		void setSource(ofFileDialogResult file);
+		void setSource(string file);
 
 		unsigned int _surfaceNumber;
 

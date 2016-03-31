@@ -7,6 +7,8 @@ void ofApp::setup(){
         ofSetVerticalSync(true);
 
 	currentSurface = -1;
+
+	loadVideos();
 }
 
 void ofApp::update(){
@@ -28,20 +30,23 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::newSurface() {
-	Surface tmpSurface;
+void ofApp::loadVideos() {
+	string path = "CosmicVids"; 
+	ofDirectory dir(path);
+	//only show png files
+	//dir.allowExt("png");
+	//populate the directory object
+	dir.listDir();
 
-	ofFileDialogResult file = ofSystemLoadDialog();
-
-	if(file.bSuccess) {
-		cout << "Name = " << file.getName() << endl;
+	//go through and print out all the paths
+	for(int i = 0; i < dir.size(); i++){
+		Surface tmpSurface;
+		ofLogNotice(dir.getPath(i));
+		string file = dir.getPath(i);
 		tmpSurface.setSource(file);
-	} else {
-		cout << "No file loaded" << endl;
+		tmpSurface.setup(surface.size());
+		surface.push_back(tmpSurface);
 	}
-
-	tmpSurface.setup(surface.size());
-	surface.push_back(tmpSurface);
 }
 
 //--------------------------------------------------------------
@@ -51,10 +56,6 @@ void ofApp::keyPressed(int key){
 
 	if(keyNum >= 0 && keyNum < surface.size()) {
 		currentSurface = keyNum;
-	}
-
-	if(key == 'o') {
-		newSurface();
 	}
 
         for(unsigned int i = 0; i < surface.size(); i++) {

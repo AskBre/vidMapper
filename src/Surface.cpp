@@ -166,10 +166,10 @@ void Surface::mouseReleased(int x, int y, int button) {
 }
 
 //--------------------------------------------------------------
-void Surface::setSource(ofFileDialogResult file) {
-	cout << "Opening the file " << file.getPath() << endl;
+void Surface::setSource(string file) {
+	cout << "Opening the file " << file << endl;
 
-	vid.load(file.getPath());
+	vid.load(file);
 	vid.setLoopState(OF_LOOP_NORMAL);
 	vid.play();
 }

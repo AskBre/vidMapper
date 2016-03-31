@@ -15,15 +15,6 @@ void MaskCreator::setup(unsigned _maskVersion){
         cursor.fillColor = 0xff0000;
         cursor.borderColor = 0xfffff0;
 
-        // Setup blur
-        int blurRadius = 8;
-        float blurShape = .2;
-        int blurPasses = 8;
-        float blurDownsample = 0.5;
-        isBlur = false;
-        blur.setup(ofGetWidth(), ofGetHeight(), blurRadius, blurShape, blurPasses, blurDownsample);
-        blur.setBrightness(.5);
-
 	loadShape();
 }
 
@@ -60,16 +51,11 @@ void MaskCreator::drawShape(float alpha){
 	ofPushStyle();
 		glColor4f(1, 1, 1, 1-alpha);
 		ofFill();
-		if(isBlur) blur.begin();
 		ofBeginShape();
 		for(unsigned int i = 0; i < vertex.size(); i++) {
 			ofVertex(vertex[i].x, vertex[i].y);
 		}
 		ofEndShape();
-		if(isBlur)
-			blur.end();
-		if(isBlur)
-			blur.draw();
 	ofPopStyle();
 }
 

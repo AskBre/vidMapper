@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxBlur.h"
 #include "ofxXmlSettings.h"
 
 typedef struct {
@@ -60,8 +59,5 @@ class MaskCreator : public ofBaseApp{
 		int vertexBigRadius;
 		int circleColor;
 
-		ofxBlur blur;
-		bool isBlur;
-		
 		ofMesh shape;
 };
